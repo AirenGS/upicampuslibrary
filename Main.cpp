@@ -71,11 +71,15 @@ int main()
         break;
     case 3:
         // KELUAR
+        warna(2);
         cout << "Terima kasih dan sampai jumpa!";
+        warna(7);
         return 0;
     default:
-        {
+        {   
+            warna(4);
             cout << "Masukan pilihan yang valid" << endl;
+            warna(7);
             system("pause");
             main();
             break;
@@ -255,10 +259,11 @@ int tanggalMaker(){
 void login(){
     mahasiswa mhs;
     int count = 0;
+    warna(1);
     cout << "\t\t\t\t\t============================" << endl;
     warna(5);
     cout << "\t\t\t\t\t\tMENU LOGIN" << endl;
-    warna(7);
+    warna(1);
     cout << "\t\t\t\t\t============================\n" << endl;
     warna(5);
     cout << "Username (Masukan NIM sebagai username)\t: ";
@@ -309,10 +314,11 @@ void login(){
 void registrasi(){
     mahasiswa mhs;
     // input data
+    warna(1);
     cout << "\t\t\t\t\t================================" << endl;
     warna(5);
     cout << "\t\t\t\t\t\tMENU REGISTRASI" << endl;
-    warna(7);
+    warna(1);
     cout << "\t\t\t\t\t================================\n" << endl;
     warna(5);
     cout << "Nama Lengkap\t\t\t: ";
@@ -337,17 +343,21 @@ void registrasi(){
     fileRegister << mhs.nama;
     fileRegister.close();
     system("cls");
+    warna(2);
     cout << "\nRegister berhasil!" << endl;
+    warna(7);
     system("pause");
     main();
 }
 int menu(){
     int pilih = 0;
     system("cls");
+    warna(1);
     cout << "\t\t\t\t\t==================================" << endl;
+    warna(7);
     warna(5);
     cout << "\t\t\t\t\t\tUPI CAMPUS LIBRARY" << endl;
-    warna(7);
+    warna(1);
     cout << "\t\t\t\t\t==================================\n\n" << endl;
     warna(5);
     cout << "[1] REGISTER" << endl;
@@ -362,13 +372,17 @@ int menu(){
 int menuPetugas(){
     int pilih;
     system("cls");
-    cout << "=======================" << endl;
-    cout << "Aplikasi Perpustakaan | " << petUsername << endl;
-    cout << "=======================" << endl;
-    cout << "1. Kelola Buku" << endl;
-    cout << "2. Keluar" << endl;
-    cout << "=======================" << endl;
-    cout << "Pilih menu: ";
+    warna(7);
+    cout << "\t\t\t\t\t==================================" << endl;
+    warna(6);
+    cout << "\t\t\t\t\t\t  W E L C O M E                       - "<< petUsername << endl;
+    cout << "\t\t\t\t\t\tUPI CAMPUS LIBRARY" << endl;
+    warna(7);
+    cout << "\t\t\t\t\t==================================\n\n" << endl;
+    warna(6);
+    cout << "[1] Kelola Buku" << endl;
+    cout << "[2] Keluar" << endl;
+    cout << "Silahkan pilih menu\t: ";
     cin >> pilih;
     return pilih;
 }
@@ -592,7 +606,7 @@ int daftarBuku(){
     cout << "\t\t\t\t\t===============================\n\n\n" << endl;
     cout << "=======================" << endl;
     warna(5);
-    cout << "List Buku" << endl;
+    cout << "      List Buku" << endl;
     warna(7);
     cout << "=======================" << endl;
 
