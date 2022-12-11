@@ -17,19 +17,18 @@ struct buku{
 struct mahasiswa{
     string nama, password, NIM; 
 };
-
 // Akun Petugas
 string petUsername = "admin"; 
 string petPassword = "admin"; 
 // Active User
 string logUsername, username, logPassword, password, nama, line;
-
+// Deklarasi Waktu
 string fullDate[3];
 int dateNow[3], dateNext[3];
-int tanggalMaker();
-void warna(unsigned short warna);
 
 // Global
+int tanggalMaker();
+void warna(unsigned short warna);
 int menu();
 void login();
 void registrasi();
@@ -441,23 +440,24 @@ int kelolaBuku(){
     // Tampilkan buku
     string line;
     ifstream file("data_buku.txt");
-    string judul, pengarang, kodeBuku, status;
+    string judul, pengarang, kodeBuku, status, peminjam;
     system("cls");
-    cout << "                               Tabel Buku                                "<< endl; 
-    cout << "========================================================================="<< endl; 
-    cout << "| Judul Buku             | Pengarang           | Kode Buku   | Status   |"<< endl; 
-    cout << "========================================================================="<< endl; 
-    while(!file.eof()){
-        getline(file, line);
+    cout << "                                      Tabel Buku                                      "<< endl; 
+    cout << "======================================================================================"<< endl; 
+    cout << "| Judul Buku             | Pengarang           | Kode Buku   | Status    | Peminjam  |"<< endl; 
+    cout << "======================================================================================"<< endl; 
+    while(getline(file, line)){
         stringstream ss(line);
         getline(ss, judul, ',');
         getline(ss, pengarang, ',');
         getline(ss, kodeBuku, ',');
         getline(ss, status, ',');
+        getline(ss, peminjam, ',');
         cout<<"| "<<setiosflags(ios::left)<<setw(23)<<judul<<"|";
         cout<<" "<<setiosflags(ios::left)<<setw(20)<<pengarang<<"|";
         cout<<" "<<setiosflags(ios::left)<<setw(12)<<kodeBuku<<"|";
-        cout<<" "<<setiosflags(ios::left)<<setw(9)<<status<<"|"<< endl;
+        cout<<" "<<setiosflags(ios::left)<<setw(10)<<status<<"|";
+        cout<<" "<<setiosflags(ios::left)<<setw(10)<<peminjam<<"|"<< endl;
     }
     file.close();
     cout << "\n "<< endl;
