@@ -615,6 +615,7 @@ int menuBuku(){
     cout << "=======================\n" << endl;
     cout << "Silahkan pilih menu\t: ";
     cin >> pilih;
+    cout << "=======================" << endl;
     return pilih;
 }
 int daftarBuku(){
@@ -731,9 +732,23 @@ int pinjamBuku(int inputBuku, int thisBuku){
 }
 int cariBuku(){
     string buku, pengarang ,kodeBuku, status, line, idPeminjam;
-    int i = 0, j = 0;
+    int h= 0, i = 0, j = 0;
     int back = 1;
-    string kotak_judulBuku[10], kotak_idBuku[10], kotak_pengarang[10], kotak_status[10], kotak_idPeminjam[10];
+
+    ifstream hitungBuku;
+    hitungBuku.open("data_buku.txt");
+    string hitungLine;
+
+    while (getline(hitungBuku, hitungLine))
+    {
+        stringstream ss(line);
+        h++;
+    }
+    hitungBuku.close();
+
+    string kotak_judulBuku[h], kotak_idBuku[h], kotak_pengarang[h], kotak_status[h], kotak_idPeminjam[h];
+    int sortir_judulBuku[h], sortir_idBuku[h], sortir_pengarang[h], sortir_status[h], sortir_idPeminjam[h];
+
     ifstream buku_data;
     buku_data.open("data_buku.txt");
 
@@ -745,23 +760,84 @@ int cariBuku(){
         getline(ss, kodeBuku, ',');
         getline(ss, status, ',');
         getline(ss, idPeminjam, ',');
+
+
         kotak_judulBuku[i] = buku;
         kotak_idBuku[i] = kodeBuku;
         kotak_pengarang[i] = pengarang;
         kotak_status[i] = status;
         kotak_idPeminjam[i] = idPeminjam;
 
+        sortir_idBuku[i] = stoi(kotak_idBuku[i]);
+
         i++;
     }
+    buku_data.close();
+
+    int sortBuku = h;
+    int temp;
+    for (int l = 0; l < sortBuku; l++)
+    {
+        for (int m = l + 1; m < sortBuku; m++)
+        {
+            if (sortir_idBuku[l] > sortir_idBuku[l])
+            {
+                temp = sortir_idBuku[l];
+                sortir_idBuku[l] = sortir_idBuku[m];
+                sortir_idBuku[m] = temp;
+            }
+        }
+    }
+
+    ifstream tampil_buku_urut;
+    string tampil_line_urut;
+    tampil_buku_urut.open("data_buku.txt");
+    int kodeBukuNum[h], kodeIdBukuNum;
+
+    system("cls");
+    cout << "=======================" << endl;
+    cout << "List Judul Buku - Kode Buku" << endl;
+    cout << "=======================" << endl;
+
+    int o = 0;
+    while (getline(tampil_buku_urut, tampil_line_urut))
+    {
+        stringstream ss(tampil_line_urut);
+        getline(ss, buku, ',');
+        getline(ss, pengarang, ',');
+        getline(ss, kodeBuku, ',');
+        getline(ss, status, ',');
+        getline(ss, idPeminjam, ',');
+
+        kodeBukuNum[o] = sortir_idBuku[o];
+        kodeIdBukuNum = stoi(kodeBuku);
+        string tandaBuku[2];
+        tandaBuku[0] = " " ;
+        tandaBuku[1] = "Kosong";
+
+        if(sortir_idBuku[o] == kodeIdBukuNum){
+            if (status == "kosong")
+            {
+                cout << sortir_idBuku[o] << "|" << buku << " [" << tandaBuku[1] << "] " << endl;
+            }
+            else
+            {
+                cout << sortir_idBuku[o] << "|" << buku << " " << tandaBuku[0] << endl;
+            }
+        }
+
+        o++;
+    }
+
     buku_data.close();
     string searchBuku;
     int k = 0, pilih;
 
     cin.clear();
     cin.sync();
-    system("cls");
+    cout << "=======================" << endl;
     cout << "Ketik judul atau kode buku yang dicari"<< endl;
-    cout << "==================="<< endl;
+    cout << "=======================" << endl;
     cout << "Masukan kata kunci : "; 
     getline(cin, searchBuku);
     for (int k = 0; k <= i; k++){

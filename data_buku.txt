@@ -1,5 +1,5 @@
 Your Name,Makoto Shinkai,20001,kosong,2200679
 Weathering With You,Makoto Shinkai,20002,tersedia,null
 Re:ZERO,Tapei Nagatsuki,20003,tersedia,null
-Another,simarmata,20004,tersedia,null
-Ngoding Skuy,simarmata,20005,tersedia,null
+Another,simarmata,20004,kosong,2204501
+Ngoding Skuy,simarmata,20005,kosong,2204501
