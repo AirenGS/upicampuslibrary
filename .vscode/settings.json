@@ -44,7 +44,8 @@
     "streambuf": "cpp",
     "typeinfo": "cpp",
     "iomanip": "cpp",
-    "list": "cpp"
+    "list": "cpp",
+    "mainwithproses": "cpp"
   },
   "C_Cpp_Runner.cCompilerPath": "C:/mingw64/bin/gcc.exe",
   "C_Cpp_Runner.cppCompilerPath": "g++",

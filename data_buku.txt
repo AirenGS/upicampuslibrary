@@ -1,7 +1,7 @@
 Your Name,Makoto Shinkai,20001,tersedia,null
-Weathering With You,Makoto Shinkai,20002,kosong,z
-Re:ZERO,Tapei Nagatsuki,20003,kosong,z
-Another,simarmata,20004,kosong,2204501
-Ngoding Skuy,simarmata,20005,kosong,z
+Weathering With You,Makoto Shinkai,20002,kosong,2204501
+Re:ZERO,Tapei Nagatsuki,20003,tersedia,null
+Another,simarmata,20004,tersedia,null
+Ngoding Skuy,simarmata,20005,tersedia,null
 Berilmu,Simarmata,20006,tersedia,null
 Ez Gaming,Alfeus,20007,tersedia,null

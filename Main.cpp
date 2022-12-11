@@ -77,12 +77,12 @@ int main()
     default:
         {   
             warna(4);
-            cout << "Masukan pilihan yang valid" << endl;
+            cout << "\nMasukan pilihan yang valid" << endl;
             warna(7);
             system("pause");
             main();
-            break;
-        }
+            
+        }break;
     }
     label_pilih:
     int pilih2;
@@ -98,9 +98,15 @@ int main()
                     }
                 }
                 break;
-                default:
-                    break;
+                default: {
+                    warna(4);
+                    cout << "\nMasukkan pilihan yang benar!" << endl;
+                    warna(7);
+                    system("pause");
+                    goto label_pilih;
                 }
+                    break;
+            }
         }
         if(pilih2 == KELUAR){
             string *logUsername = NULL;
@@ -358,7 +364,7 @@ void registrasi(){
     {
         system("cls");
         warna(4);
-        cout << "NIM harus 7 digit!" << endl;
+        cout << "Panjang NIM harus 7 digit!" << endl;
         warna(7);
         system("pause");
         main();
@@ -428,6 +434,7 @@ int menuPetugas(){
 }
 int kelolaBuku(){
     KELOLA_BUKU:
+    warna(6);
     int back = 1;
     int input;
 
@@ -436,18 +443,19 @@ int kelolaBuku(){
     ifstream file("data_buku.txt");
     string judul, pengarang, kodeBuku, status;
     system("cls");
-    cout << "                              Tabel Buku                               "<< endl; 
-    cout << "======================================================================="<< endl; 
-    cout << "| Judul Buku             | Pengarang         | Kode Buku   | Status   |"<< endl; 
-    cout << "======================================================================="<< endl; 
-    while(getline(file, line)){
+    cout << "                               Tabel Buku                                "<< endl; 
+    cout << "========================================================================="<< endl; 
+    cout << "| Judul Buku             | Pengarang           | Kode Buku   | Status   |"<< endl; 
+    cout << "========================================================================="<< endl; 
+    while(!file.eof()){
+        getline(file, line);
         stringstream ss(line);
         getline(ss, judul, ',');
         getline(ss, pengarang, ',');
         getline(ss, kodeBuku, ',');
         getline(ss, status, ',');
         cout<<"| "<<setiosflags(ios::left)<<setw(23)<<judul<<"|";
-        cout<<"| "<<setiosflags(ios::left)<<setw(23)<<judul<<"|";
+        cout<<" "<<setiosflags(ios::left)<<setw(20)<<pengarang<<"|";
         cout<<" "<<setiosflags(ios::left)<<setw(12)<<kodeBuku<<"|";
         cout<<" "<<setiosflags(ios::left)<<setw(9)<<status<<"|"<< endl;
     }
@@ -532,6 +540,7 @@ int tambahBuku(){
     return back;
 }
 int hapusBuku(){
+    system("cls");
     string buku, pengarang, kodeBuku, status, peminjam, line, inputKode;
     int hapus = 1;
     cout << "Masukkan kode buku: ";
@@ -581,7 +590,9 @@ int hapusBuku(){
             return hapus;
         }
     }
+    warna(4);
     cout << "Buku tidak ditemukan" << endl;
+    warna(7);
     return hapus;
 }
 int menuMahasiswa(){
@@ -801,7 +812,7 @@ int cariBuku(){
 
     ifstream buku_data;
     string kotak_judulBuku[h], kotak_idBuku[h], kotak_pengarang[h], kotak_status[h], kotak_idPeminjam[h];
-    int sortir_judulBuku[h], sortir_idBuku[h], sortir_pengarang[h], sortir_status[h], sortir_idPeminjam[h];
+    int sortir_idBuku[h];
     buku_data.open("data_buku.txt");
     while (getline(buku_data, line))
     {
@@ -820,7 +831,6 @@ int cariBuku(){
         i++;
     }
     buku_data.close();
-
     int sortBuku = h;
     int temp;
     for (int l = 0; l < sortBuku; l++)
