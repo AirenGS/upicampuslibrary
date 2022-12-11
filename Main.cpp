@@ -72,7 +72,7 @@ int main()
     case 3:
         // KELUAR
         cout << "Terima kasih dan sampai jumpa!";
-        return 0;
+        exit(0);
     default:
         {
             cout << "Masukan pilihan yang valid" << endl;
@@ -109,7 +109,6 @@ int main()
     } else {
         pilih2 = menuMahasiswa();
         enum option{DAFTARBUKU = 1, BUKU, PEMINJAMAN, PENGEMBALIAN, DAFTARPENGEMBALIAN, KELUAR};
-        // ANCHOR Perubahan buku manual menjadi database
         while(pilih2 != KELUAR){
             switch (pilih2)
             {
@@ -182,6 +181,7 @@ void warna(unsigned short warna){
 }
 int tanggalMaker(){
     int i = 0;
+    // ANCHOR Kostum tanggal disini
     char str[] = __DATE__;
     char *token = strtok(str, " ");
     while (token != NULL)
@@ -326,6 +326,33 @@ void registrasi(){
     cout << "Buat Password Baru\t\t: ";
     warna(7);
     getline(cin, mhs.password);
+    
+    ifstream input("data_mahasiswa.txt");
+
+    while(!input.eof()){
+        getline(input, line);
+        stringstream ss(line);
+        getline(ss, username, ',');
+        getline(ss, password, ',');
+        getline(ss, nama, ',');
+
+        if (username == mhs.NIM)
+        {
+            system("cls");
+            cout << "NIM Sudah Dipakai!" << endl;
+            system("pause");
+            main();
+        }
+
+    }
+    
+    if (mhs.NIM.length() != 7)
+    {
+        system("cls");
+        cout << "NIM Harus 7 Digit!" << endl;
+        system("pause");
+        main();
+    }
 
     ofstream fileRegister;
     fileRegister.open("data_mahasiswa.txt", ios::app);
@@ -336,6 +363,7 @@ void registrasi(){
     fileRegister << ",";
     fileRegister << mhs.nama;
     fileRegister.close();
+
     system("cls");
     cout << "\nRegister berhasil!" << endl;
     system("pause");
@@ -562,20 +590,28 @@ int menuBuku(){
 
     ifstream listBuku;
     listBuku.open("data_buku.txt");
-    string listJudulBuku, listLineBuku;
+    string listJudulBuku, listLineBuku, listPengarang, listIdBuku, listStatusBuku;
     int listNo = 1;
+    string tandaBuku[2];
+    tandaBuku[0] = " " ;
+    tandaBuku[1] = "Kosong";
 
     while (getline(listBuku,listLineBuku))
     {
         stringstream ss(listLineBuku);
         getline(ss, listJudulBuku, ',');
-        cout << listNo << ". " << listJudulBuku << endl;
+        getline(ss, listPengarang, ',');
+        getline(ss, listIdBuku, ',');
+        getline(ss, listStatusBuku, ',');
+        if (listStatusBuku == "kosong") {
+            cout << listNo << ". " << listJudulBuku << " [" << tandaBuku[1]<< "] " << endl;
+        } else {
+            cout << listNo << ". " << listJudulBuku << " " << tandaBuku[0]<< endl;
+        }
+        
         listNo++;
     }
     listBuku.close();
-    // cout << "1. Your Name" << endl;
-    // cout << "2. Weathering With You" << endl;
-    // cout << "3. Re:ZERO" << endl;
     cout << "=======================\n" << endl;
     cout << "Silahkan pilih menu\t: ";
     cin >> pilih;
@@ -818,9 +854,9 @@ void daftarPeminjaman(){
     string judul, tanggal_peminjaman, peminjam, tanggal_setKembali;
     system("cls");
     cout << "Tabel Peminjaman"<< endl; 
-    cout << "===================================================================="<< endl; 
-    cout << "|Judul Buku              |Tanggal Peminjaman          |Peminjam    |"<< endl; 
-    cout << "===================================================================="<< endl; 
+    cout << "================================================================================================="<< endl; 
+    cout << "|Judul Buku              |Tanggal Peminjaman          |Tanggal Kembali             |Peminjam    |"<< endl; 
+    cout << "================================================================================================="<< endl; 
     while(getline(file, line)){
         stringstream ss(line);
         getline(ss, judul, ',');
@@ -833,6 +869,7 @@ void daftarPeminjaman(){
             // cout << judul << " " << tanggal_peminjaman << " " << peminjam << endl;
             cout<<"| "<<setiosflags(ios::left)<<setw(23)<<judul<<"|";
             cout<<" "<<setiosflags(ios::left)<<setw(27)<<tanggal_peminjaman<<"|";
+            cout<<" "<<setiosflags(ios::left)<<setw(27)<<tanggal_setKembali<<"|";
             cout<<" "<<setiosflags(ios::left)<<setw(11)<<peminjam<<"|"<<endl;
         }
     }
