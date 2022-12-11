@@ -786,12 +786,23 @@ int pinjamBuku(int inputBuku, int thisBuku){
 }
 int cariBuku(){
     string buku, pengarang ,kodeBuku, status, line, idPeminjam;
-    int i = 0, j = 0;
+    int h= 0, i = 0, j = 0;
     int back = 1;
-    string kotak_judulBuku[10], kotak_idBuku[10], kotak_pengarang[10], kotak_status[10], kotak_idPeminjam[10];
-    ifstream buku_data;
-    buku_data.open("data_buku.txt");
 
+    ifstream hitungBuku;
+    hitungBuku.open("data_buku.txt");
+    string hitungLine;
+    while (getline(hitungBuku, hitungLine))
+    {
+        stringstream ss(line);
+        h++;
+    }
+    hitungBuku.close();
+
+    ifstream buku_data;
+    string kotak_judulBuku[h], kotak_idBuku[h], kotak_pengarang[h], kotak_status[h], kotak_idPeminjam[h];
+    int sortir_judulBuku[h], sortir_idBuku[h], sortir_pengarang[h], sortir_status[h], sortir_idPeminjam[h];
+    buku_data.open("data_buku.txt");
     while (getline(buku_data, line))
     {
         stringstream ss(line);
@@ -805,18 +816,72 @@ int cariBuku(){
         kotak_pengarang[i] = pengarang;
         kotak_status[i] = status;
         kotak_idPeminjam[i] = idPeminjam;
-
+        sortir_idBuku[i] = stoi(kotak_idBuku[i]);
         i++;
     }
     buku_data.close();
+
+    int sortBuku = h;
+    int temp;
+    for (int l = 0; l < sortBuku; l++)
+    {
+        for (int m = l + 1; m < sortBuku; m++)
+        {
+            if (sortir_idBuku[l] > sortir_idBuku[l])
+            {
+                temp = sortir_idBuku[l];
+                sortir_idBuku[l] = sortir_idBuku[m];
+                sortir_idBuku[m] = temp;
+            }
+        }
+    }
+
+    string tampil_line_urut;
+    int kodeBukuNum[h], kodeIdBukuNum;
+    int o = 0;
+    ifstream tampil_buku_urut;
+    tampil_buku_urut.open("data_buku.txt");
+    system("cls");
+    cout << "=======================" << endl;
+    cout << "List Judul Buku - Kode Buku" << endl;
+    cout << "=======================" << endl;
+    while (getline(tampil_buku_urut, tampil_line_urut))
+    {
+        stringstream ss(tampil_line_urut);
+        getline(ss, buku, ',');
+        getline(ss, pengarang, ',');
+        getline(ss, kodeBuku, ',');
+        getline(ss, status, ',');
+        getline(ss, idPeminjam, ',');
+        kodeBukuNum[o] = sortir_idBuku[o];
+        kodeIdBukuNum = stoi(kodeBuku);
+        
+        string tandaBuku[2];
+        tandaBuku[0] = " " ;
+        tandaBuku[1] = "Kosong";
+        if(sortir_idBuku[o] == kodeIdBukuNum){
+            if (status == "kosong")
+            {
+                cout << setiosflags(ios::left)<<setw(5)<< sortir_idBuku[o] << "|";
+                cout << setiosflags(ios::left)<<setw(20) << buku;
+                cout <<" [" << setiosflags(ios::left)<<setw(6)<< tandaBuku[1] << "] " << endl;
+            }
+            else
+            {
+                cout << sortir_idBuku[o] << "|" << buku << " " << tandaBuku[0] << endl;
+            }
+        }
+        o++;
+    }
+    buku_data.close();
+
     string searchBuku;
     int k = 0, pilih;
-
     cin.clear();
     cin.sync();
-    system("cls");
+    cout << "=======================" << endl;
     cout << "Ketik judul atau kode buku yang dicari"<< endl;
-    cout << "==================="<< endl;
+    cout << "=======================" << endl;
     cout << "Masukan kata kunci : "; 
     getline(cin, searchBuku);
     for (int k = 0; k <= i; k++){
@@ -862,10 +927,6 @@ int cariBuku(){
                 system("pause");
                 return back;
             } else {
-                // cout << "Apakah anda ingin meminjam buku tersebut (1/0)? ";
-                // cin >> pilih;
-                // if (pilih == 1)
-                // {
                 ofstream filePeminjaman;
                 filePeminjaman.open("data_peminjaman.txt", ios::app);
                 filePeminjaman << kotak_judulBuku[k] << ",";
@@ -877,12 +938,6 @@ int cariBuku(){
                 filePeminjaman.close();
                 system("pause");
                 return back;
-                // }
-                // else
-                // {
-                // system("pause");
-                // goto label_pilih;
-                // }
             }
         }
     }
