@@ -12,7 +12,7 @@
 
 using namespace std;
 struct buku{
-    string judul, pengarang, kode, status; 
+    string judul, pengarang, kode, status, peminjam; 
 };
 struct mahasiswa{
     string nama, password, NIM; 
@@ -71,11 +71,14 @@ int main()
         break;
     case 3:
         // KELUAR
+        warna(2);
         cout << "Terima kasih dan sampai jumpa!";
-        return 0;
+        exit(0);
     default:
-        {
+        {   
+            warna(4);
             cout << "Masukan pilihan yang valid" << endl;
+            warna(7);
             system("pause");
             main();
             break;
@@ -109,7 +112,6 @@ int main()
     } else {
         pilih2 = menuMahasiswa();
         enum option{DAFTARBUKU = 1, BUKU, PEMINJAMAN, PENGEMBALIAN, DAFTARPENGEMBALIAN, KELUAR};
-        // ANCHOR Perubahan buku manual menjadi database
         while(pilih2 != KELUAR){
             switch (pilih2)
             {
@@ -182,6 +184,7 @@ void warna(unsigned short warna){
 }
 int tanggalMaker(){
     int i = 0;
+    // ANCHOR Kostum tanggal disini
     char str[] = __DATE__;
     char *token = strtok(str, " ");
     while (token != NULL)
@@ -255,10 +258,11 @@ int tanggalMaker(){
 void login(){
     mahasiswa mhs;
     int count = 0;
+    warna(1);
     cout << "\t\t\t\t\t============================" << endl;
     warna(5);
     cout << "\t\t\t\t\t\tMENU LOGIN" << endl;
-    warna(7);
+    warna(1);
     cout << "\t\t\t\t\t============================\n" << endl;
     warna(5);
     cout << "Username (Masukan NIM sebagai username)\t: ";
@@ -309,10 +313,11 @@ void login(){
 void registrasi(){
     mahasiswa mhs;
     // input data
+    warna(1);
     cout << "\t\t\t\t\t================================" << endl;
     warna(5);
     cout << "\t\t\t\t\t\tMENU REGISTRASI" << endl;
-    warna(7);
+    warna(1);
     cout << "\t\t\t\t\t================================\n" << endl;
     warna(5);
     cout << "Nama Lengkap\t\t\t: ";
@@ -326,6 +331,33 @@ void registrasi(){
     cout << "Buat Password Baru\t\t: ";
     warna(7);
     getline(cin, mhs.password);
+    
+    ifstream input("data_mahasiswa.txt");
+
+    while(!input.eof()){
+        getline(input, line);
+        stringstream ss(line);
+        getline(ss, username, ',');
+        getline(ss, password, ',');
+        getline(ss, nama, ',');
+
+        if (username == mhs.NIM)
+        {
+            system("cls");
+            cout << "NIM Sudah Dipakai!" << endl;
+            system("pause");
+            main();
+        }
+
+    }
+    
+    if (mhs.NIM.length() != 7)
+    {
+        system("cls");
+        cout << "NIM Harus 7 Digit!" << endl;
+        system("pause");
+        main();
+    }
 
     ofstream fileRegister;
     fileRegister.open("data_mahasiswa.txt", ios::app);
@@ -336,18 +368,23 @@ void registrasi(){
     fileRegister << ",";
     fileRegister << mhs.nama;
     fileRegister.close();
+
     system("cls");
+    warna(2);
     cout << "\nRegister berhasil!" << endl;
+    warna(7);
     system("pause");
     main();
 }
 int menu(){
     int pilih = 0;
     system("cls");
+    warna(1);
     cout << "\t\t\t\t\t==================================" << endl;
+    warna(7);
     warna(5);
     cout << "\t\t\t\t\t\tUPI CAMPUS LIBRARY" << endl;
-    warna(7);
+    warna(1);
     cout << "\t\t\t\t\t==================================\n\n" << endl;
     warna(5);
     cout << "[1] REGISTER" << endl;
@@ -362,13 +399,17 @@ int menu(){
 int menuPetugas(){
     int pilih;
     system("cls");
-    cout << "=======================" << endl;
-    cout << "Aplikasi Perpustakaan | " << petUsername << endl;
-    cout << "=======================" << endl;
-    cout << "1. Kelola Buku" << endl;
-    cout << "2. Keluar" << endl;
-    cout << "=======================" << endl;
-    cout << "Pilih menu: ";
+    warna(7);
+    cout << "\t\t\t\t\t==================================" << endl;
+    warna(6);
+    cout << "\t\t\t\t\t\t  W E L C O M E                       - "<< petUsername << endl;
+    cout << "\t\t\t\t\t\tUPI CAMPUS LIBRARY" << endl;
+    warna(7);
+    cout << "\t\t\t\t\t==================================\n\n" << endl;
+    warna(6);
+    cout << "[1] Kelola Buku" << endl;
+    cout << "[2] Keluar" << endl;
+    cout << "Silahkan pilih menu\t: ";
     cin >> pilih;
     return pilih;
 }
@@ -417,7 +458,6 @@ int kelolaBuku(){
         // CASE HAPUS BUKU :)
         int hapus = hapusBuku();
         if(hapus == 1){
-            cout << "Data Berhasil Dihapus" << endl;
             system("pause");
             goto KELOLA_BUKU;
         }
@@ -443,6 +483,7 @@ void tambahBuku(){
     cout << "Masukkan kode buku: ";
     getline(cin, bk.kode);
     bk.status = "tersedia";
+    bk.peminjam = "null";
 
     ofstream FileBuku;
     FileBuku.open("data_buku.txt", ios::app);
@@ -452,13 +493,17 @@ void tambahBuku(){
     FileBuku << ",";
     FileBuku << bk.kode;
     FileBuku << ",";
-    FileBuku << bk.status << endl;
+    FileBuku << bk.status;
+    FileBuku << ",";
+    FileBuku << bk.peminjam << endl;
     FileBuku.close();
+    cout << "\n======================" << endl;
     cout << "Buku berhasil ditambah" << endl;
+    cout << "======================" << endl;
 }
 int hapusBuku(){
-    string buku, pengarang, kodeBuku, status, line, inputKode;
-    int hapus;
+    string buku, pengarang, kodeBuku, status, peminjam, line, inputKode;
+    int hapus = 1;
     cout << "Masukkan kode buku: ";
     cin >> inputKode;
 
@@ -472,36 +517,38 @@ int hapusBuku(){
         getline(ss, pengarang, ',');
         getline(ss, kodeBuku, ',');
         getline(ss, status, ',');
+        getline(ss, peminjam, ',');
         
         if (inputKode == kodeBuku){
             fstream read_file;
-        read_file.open("data_buku.txt");
-        vector<string> lines;
-        string line;
+            read_file.open("data_buku.txt");
+            vector<string> lines;
+            string line;
 
-        while(getline(read_file, line)){
-            lines.push_back(line);
-        }
-        read_file.close();
-        int line_number = 0;
-        for (int i = 0; i < lines.size(); i++){
-            if (lines[i] == buku + "," + pengarang + "," + kodeBuku + "," + status){
-                line_number = i;
-            };
-        }
-        buku_data.close();
-        ofstream write_file;
-        write_file.open("data_buku.txt");
-        for (int i = 0; i < lines.size(); i++)
-        {
-            if (i != line_number){
-                write_file << lines[i] <<endl;
-                hapus = 1;
+            while(getline(read_file, line)){
+                lines.push_back(line);
             }
-        }
-        write_file.close();
+            read_file.close();
+            int line_number;
+            for (int i = 0; i < lines.size(); i++){
+                if (lines[i] == buku + "," + pengarang + "," + kodeBuku + "," + status + "," + peminjam){
+                    line_number = i;
+                };
+            }
+            buku_data.close();
+            ofstream write_file;
+            write_file.open("data_buku.txt");
+            for (int i = 0; i < lines.size(); i++){
+                if (i != line_number){
+                    write_file << lines[i] <<endl;
+                }
+            }
+            cout << "Data Berhasil Dihapus" << endl;
+            write_file.close();
+            return hapus;
         }
     }
+    cout << "Buku tidak ditemukan" << endl;
     return hapus;
 }
 int menuMahasiswa(){
@@ -562,20 +609,28 @@ int menuBuku(){
 
     ifstream listBuku;
     listBuku.open("data_buku.txt");
-    string listJudulBuku, listLineBuku;
+    string listJudulBuku, listLineBuku, listPengarang, listIdBuku, listStatusBuku;
     int listNo = 1;
+    string tandaBuku[2];
+    tandaBuku[0] = " " ;
+    tandaBuku[1] = "Kosong";
 
     while (getline(listBuku,listLineBuku))
     {
         stringstream ss(listLineBuku);
         getline(ss, listJudulBuku, ',');
-        cout << listNo << ". " << listJudulBuku << endl;
+        getline(ss, listPengarang, ',');
+        getline(ss, listIdBuku, ',');
+        getline(ss, listStatusBuku, ',');
+        if (listStatusBuku == "kosong") {
+            cout << listNo << ". " << listJudulBuku << " [" << tandaBuku[1]<< "] " << endl;
+        } else {
+            cout << listNo << ". " << listJudulBuku << " " << tandaBuku[0]<< endl;
+        }
+        
         listNo++;
     }
     listBuku.close();
-    // cout << "1. Your Name" << endl;
-    // cout << "2. Weathering With You" << endl;
-    // cout << "3. Re:ZERO" << endl;
     cout << "=======================\n" << endl;
     cout << "Silahkan pilih menu\t: ";
     cin >> pilih;
@@ -592,7 +647,7 @@ int daftarBuku(){
     cout << "\t\t\t\t\t===============================\n\n\n" << endl;
     cout << "=======================" << endl;
     warna(5);
-    cout << "List Buku" << endl;
+    cout << "      List Buku" << endl;
     warna(7);
     cout << "=======================" << endl;
 
@@ -818,9 +873,9 @@ void daftarPeminjaman(){
     string judul, tanggal_peminjaman, peminjam, tanggal_setKembali;
     system("cls");
     cout << "Tabel Peminjaman"<< endl; 
-    cout << "===================================================================="<< endl; 
-    cout << "|Judul Buku              |Tanggal Peminjaman          |Peminjam    |"<< endl; 
-    cout << "===================================================================="<< endl; 
+    cout << "================================================================================================="<< endl; 
+    cout << "|Judul Buku              |Tanggal Peminjaman          |Tanggal Kembali             |Peminjam    |"<< endl; 
+    cout << "================================================================================================="<< endl; 
     while(getline(file, line)){
         stringstream ss(line);
         getline(ss, judul, ',');
@@ -833,6 +888,7 @@ void daftarPeminjaman(){
             // cout << judul << " " << tanggal_peminjaman << " " << peminjam << endl;
             cout<<"| "<<setiosflags(ios::left)<<setw(23)<<judul<<"|";
             cout<<" "<<setiosflags(ios::left)<<setw(27)<<tanggal_peminjaman<<"|";
+            cout<<" "<<setiosflags(ios::left)<<setw(27)<<tanggal_setKembali<<"|";
             cout<<" "<<setiosflags(ios::left)<<setw(11)<<peminjam<<"|"<<endl;
         }
     }
@@ -891,7 +947,7 @@ int pengembalianBuku(){
                     } else if (logUsername != idPeminjam && status == "kosong") {
                         write_file << buku + "," + pengarang + "," + idBuku + "," + "kosong" + "," + idPeminjam << endl;
                     } else if (logUsername == idPeminjam && status == "tersedia") {
-                        write_file << buku + "," + pengarang + "," + idBuku + "," + "terseida" + "," + "null" << endl;
+                        write_file << buku + "," + pengarang + "," + idBuku + "," + "tersedia" + "," + "null" << endl;
                     }
                     
                 }
